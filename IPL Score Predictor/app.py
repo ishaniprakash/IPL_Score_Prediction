@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('index.html',val='')
+    return render_template('home.html',val='')
 
 @app.route('/predict',methods=['POST'])
 def predict():
@@ -121,9 +121,10 @@ def predict():
             a = a + [0,0,0,0,0,0,0,1]
 
         if batting_team==bowling_team and batting_team!='none' and bowling_team!='none':
-            return render_template('index.html',val='Batting team and Bowling team can\'t be same and none of the values can\'t be empty.')
+            return render_template('home.html',val='Batting team and Bowling team can\'t be same and none of the values can be empty.')
 
-
+        if batting_team=='none' or bowling_team=='none' or venue=='none':
+            return render_template('home.html',val='Please don\'t leave fields empty')
 
         overs = request.form['overs']
         runs = request.form['runs']
@@ -132,7 +133,7 @@ def predict():
         wickets_in_prev_5 = request.form['wickets_in_prev_5']
 
         if overs=='' or runs=='' or wickets=='' or runs_in_prev_5=='' or wickets_in_prev_5=='':
-            return render_template('index.html',val='Please don\'t leave any field empty!')
+            return render_template('home.html',val='Please don\'t leave any field empty!')
 
         overs = float(overs)
         runs = int(runs)
@@ -151,7 +152,7 @@ def predict():
         my_prediction = int(regressor.predict(data)[0])
         print(my_prediction)
 
-        return render_template('index.html', val=f'The final score will be around {my_prediction-5} to {my_prediction+10}.')
+        return render_template('home.html', val=f'The final score will be around {my_prediction-5} to {my_prediction+10}.')
 
 
 if __name__ == '__main__':
